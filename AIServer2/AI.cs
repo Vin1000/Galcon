@@ -169,11 +169,14 @@ namespace AIServer
             {
                 var myClosestPlanets = planet.GetMyClosestPlanets(name);
                 int no = 0;
-                if(myClosestPlanets.Count > 2)
+                if(myClosestPlanets.Count >= 2)
                 {
                     no = 1;
                 }
-                Game.AttackPlanet(planet, myClosestPlanets[no], (int)Math.Floor((double)planet.ShipCount * (1 - percentage)));
+                if(myClosestPlanets.Any())
+                {
+                    Game.AttackPlanet(planet, myClosestPlanets[no], (int)Math.Floor((double)planet.ShipCount * (1 - percentage)));
+                }
                 Game.AttackPlanet(planet, enemyMaster, (int)Math.Ceiling((double)planet.ShipCount * percentage)-1);
             }
             if(!DeathStar.ReadyToAttackNextTurn)
