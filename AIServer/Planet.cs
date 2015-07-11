@@ -23,7 +23,7 @@ namespace AIServer
 
         public List<Planet> GetClosestPlanets(int number)
         {
-            number = Math.Min(PlanetDistances.Count, number - 1);
+            number = Math.Min(PlanetDistances.Count-1, number);
             return PlanetDistances.Keys.OrderBy(p => this.GetDistance(p)).Take(number).ToList();
         }
 
