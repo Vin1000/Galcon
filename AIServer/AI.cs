@@ -15,7 +15,7 @@ namespace AIServer
         public TCPServer Game { get; private set; }
 
         // Set your team Name here!!!
-        private const string name = "DarthMinions";
+        private const string name = "Darth Minions";
 
         #region Info
         public List<Planet> MyPlanets
@@ -141,6 +141,8 @@ namespace AIServer
 
         void UpdatePlanets(List<Planet> newPlanets)
         {
+            //var rangeToRemove = Planets.Where(p => newPlanets.Where(np => np.ID = ))
+            //Planets.RemoveRange(Planets.Where(p => p.Id))
             foreach(var newPlanet in newPlanets)
             {
                 var currentPlanet = this.Planets.First(p => p.Id == newPlanet.Id);
