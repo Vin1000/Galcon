@@ -125,11 +125,26 @@ namespace AIServer
             {
                 foreach (Planet p in Planets.Where(p => p.ShipCount <= 5).ToList()) //sauf neighbor!!!
                 {
-                    Game.AttackPlanet(MyPlanets.First(), p, 6);
+                    try
+                    {
+                        Game.AttackPlanet(MyPlanets.First(), p, 6);
+                    }
+                    catch (Exception)
+                    {
+                        Console.Out.WriteLine("Planet attack sucked: " + p.Id);
+                    }
+                    
                 }
                 foreach (var closest in closestToEnemyMaster)
                 {
-                    Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
+                    try
+                    {
+                        Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
+                    }
+                    catch (Exception)
+                    {
+                        Console.Out.WriteLine("Closest Planet attack sucked: " + closest.Id);
+                    }
                 }
             }
             attackStrategy = 1;
@@ -141,7 +156,14 @@ namespace AIServer
             {
                 foreach (var closest in closestToEnemyMaster)
                 {
-                    Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
+                    try
+                    {
+                        Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
+                    }
+                    catch (Exception)
+                    {
+                        Console.Out.WriteLine("Closest Planet attack sucked: " + closest.Id);
+                    }
                 }
             }
             if (!closestToEnemyMaster.Any(p => p.Owner != name))
@@ -154,7 +176,14 @@ namespace AIServer
         {
             foreach (var planet in MyPlanets)
             {
-                Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
+                try
+                {
+                    Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
+                }
+                catch (Exception)
+                {
+                    Console.Out.WriteLine("Planet attack sucked: " + planet.Id);
+                }
             }
             if (closestToEnemyMaster.Any(p => p.Owner != name))
             {
@@ -175,9 +204,25 @@ namespace AIServer
                 }
                 if(myClosestPlanets.Any())
                 {
-                    Game.AttackPlanet(planet, myClosestPlanets[no], (int)Math.Floor((double)planet.ShipCount * (1 - percentage)));
+                    try
+                    {
+                        Game.AttackPlanet(planet, myClosestPlanets[no], (int)Math.Floor((double)planet.ShipCount * (1 - percentage)));
+                    }
+                    catch (Exception)
+                    {
+                        Console.Out.WriteLine("Planet attack sucked: " + planet.Id);
+                    }
                 }
-                Game.AttackPlanet(planet, enemyMaster, (int)Math.Ceiling((double)planet.ShipCount * percentage)-1);
+
+                try
+                {
+                    Game.AttackPlanet(planet, enemyMaster, (int)Math.Ceiling((double)planet.ShipCount * percentage) - 1);
+                }
+                catch (Exception)
+                {
+                    Console.Out.WriteLine("Planet attack sucked: " + planet.Id);
+                }
+                
             }
             if(!DeathStar.ReadyToAttackNextTurn)
             {
