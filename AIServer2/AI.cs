@@ -92,6 +92,14 @@ namespace AIServer
             enemyMaster = EnemyPlanets.OrderBy(p => p.ShipCount).FirstOrDefault();
             closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
 
+            Game.DeathstarDestroyPlanet(DeathStar, enemyMaster);
+
+            if (DeathStar.ReadyToAttackNextTurn)
+            {
+                attackStrategy = 3;
+                Console.Out.WriteLine("ready = 3");
+            }
+
             switch (attackStrategy)
             {
                 case 0:
@@ -111,12 +119,6 @@ namespace AIServer
                     break;
             }
             attackCount++;
-
-            if(DeathStar.ReadyToAttackNextTurn)
-            {
-                previousStrategy = attackStrategy;
-                attackStrategy = 3;
-            }
         }
 
         void Strategy0() //attack noob planets and enemy master neighbors
@@ -179,10 +181,8 @@ namespace AIServer
                 }
                 Game.AttackPlanet(planet, enemyMaster, (int)Math.Ceiling((double)planet.ShipCount * percentage)-1);
             }
-            if(!DeathStar.ReadyToAttackNextTurn)
-            {
-                attackStrategy = previousStrategy;
-            }
+            attackStrategy = 2;
+            Console.Out.WriteLine("strat = 2");
         }
 
         void UpdatePlanets(List<Planet> newPlanets)
