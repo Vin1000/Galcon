@@ -79,6 +79,11 @@ namespace AIServer
                 this._firstDataReceived = true;
                 enemyMaster = EnemyPlanets.FirstOrDefault();
             }
+            else
+            {
+                //mettre a jour
+                this.UpdatePlanets(container.Planets);
+            }
 
             foreach (var planet in Planets)
             {
@@ -107,6 +112,16 @@ namespace AIServer
                 }
             }*/
             attackCount++;
+        }
+
+        void UpdatePlanets(List<Planet> newPlanets)
+        {
+            foreach(var newPlanet in newPlanets)
+            {
+                var currentPlanet = this.Planets.First(p => p.Id == newPlanet.Id);
+                currentPlanet.Owner = newPlanet.Owner;
+                currentPlanet.ShipCount = newPlanet.ShipCount;
+            }
         }
 
         void InitPlanets(List<Planet> planets)
