@@ -67,6 +67,7 @@ namespace AIServer
 
         Planet enemyMaster;
         int attackCount = 0;
+        int attackStrategy = 0;
         public void update(UpdateContainer container)
         {
 
@@ -77,21 +78,45 @@ namespace AIServer
             {
                 InitPlanets(container.Planets);
                 this._firstDataReceived = true;
-                enemyMaster = EnemyPlanets.FirstOrDefault();
             }
             else
             {
                 //mettre a jour
                 this.UpdatePlanets(container.Planets);
             }
+            enemyMaster = EnemyPlanets.OrderBy(p => p.ShipCount).FirstOrDefault();
 
-            foreach (var planet in Planets)
+            int planetsToAttack = 2;
+            var closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
+            switch(attackStrategy)
             {
-                foreach (var closest in enemyMaster.GetClosestPlanets(3, false))
-                {
-                    Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount*0.8/3));
-                }
+                case 0:
+                    foreach (var planet in MyPlanets)
+                    {
+                        foreach (var closest in closestToEnemyMaster)
+                        {
+                            Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * 0.8 / planetsToAttack));
+                        }
+                    }
+                    if(!closestToEnemyMaster.Any(p => p.Owner != name))
+                    {
+                        attackStrategy = 1;
+                    }
+                    break;
+                case 1:
+                    if (closestToEnemyMaster.Any(p => p.Owner != name))
+                    {
+                        attackStrategy = 0;
+                    }
+                    foreach(var planet in MyPlanets)
+                    {
+                        Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * 0.8 / planetsToAttack));
+                    }
+                    break;
+                default:
+                    break;
             }
+            
 
             /*
             foreach (var planet in analyser.MyPlanets)
