@@ -89,7 +89,7 @@ namespace AIServer
             }
             
             enemyMaster = EnemyPlanets.OrderBy(p => p.ShipCount).FirstOrDefault();
-            closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
+            closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false, name);
 
             Game.DeathstarDestroyPlanet(DeathStar, enemyMaster);
 
@@ -129,10 +129,7 @@ namespace AIServer
                     {
                         Game.AttackPlanet(MyPlanets.First(), p, 6);
                     }
-                    catch (Exception)
-                    {
-                    }
-                    
+                    catch (Exception) { }
                 }
                 foreach (var closest in closestToEnemyMaster)
                 {
@@ -140,9 +137,7 @@ namespace AIServer
                     {
                         Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
                     }
-                    catch (Exception)
-                    {
-                    }
+                    catch (Exception) { }
                 }
             }
             attackStrategy = 1;
@@ -158,9 +153,7 @@ namespace AIServer
                     {
                         Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
                     }
-                    catch (Exception)
-                    {
-                    }
+                    catch (Exception) { }
                 }
             }
             if (!closestToEnemyMaster.Any(p => p.Owner != name))
@@ -177,9 +170,7 @@ namespace AIServer
                 {
                     Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception) { }
             }
             if (closestToEnemyMaster.Any(p => p.Owner != name))
             {
@@ -203,18 +194,14 @@ namespace AIServer
                     {
                         Game.AttackPlanet(planet, myClosestPlanets[no], (int)Math.Floor((double)planet.ShipCount * (1 - percentage)));
                     }
-                    catch (Exception)
-                    {
-                    }
+                    catch (Exception) { }
                 }
 
                 try
                 {
                     Game.AttackPlanet(planet, enemyMaster, (int)Math.Ceiling((double)planet.ShipCount * percentage) - 1);
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception) { }
                 
             }
             attackStrategy = 2;

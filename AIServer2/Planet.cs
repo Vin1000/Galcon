@@ -22,14 +22,14 @@ namespace AIServer
 
         public Dictionary<Planet, float> PlanetDistances { get; set; }
 
-        public List<Planet> GetClosestPlanets(int number, bool includeSelf)
+        public List<Planet> GetClosestPlanets(int number, bool includeSelf, string name)
         {
             number = Math.Min(PlanetDistances.Count - 1, number);
             if (includeSelf)
             {
-                return PlanetDistances.Keys.OrderBy(p => this.GetDistance(p)).Where(p => p.IsDeathStar == false).Take(number).ToList();
+                return PlanetDistances.Keys.OrderBy(p => this.GetDistance(p)).Where(p => p.IsDeathStar == false && p.Owner != name).Take(number).ToList();
             }
-            return PlanetDistances.Keys.Where(p => p.Id != this.Id && p.IsDeathStar == false).OrderBy(p => this.GetDistance(p)).Take(number).ToList();
+            return PlanetDistances.Keys.Where(p => p.Id != this.Id && p.IsDeathStar == false && p.Owner != name).OrderBy(p => this.GetDistance(p)).Take(number).ToList();
         }
 
         public List<Planet> GetMyClosestPlanets(string owner)
