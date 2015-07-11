@@ -79,6 +79,10 @@ namespace AIServer
                 {
                     this._turnsPossessed = 0;
                 }
+                if (this._turnsPossessed >= 7 && this.DeathStarCharge == 0)
+                {
+                    this._turnsPossessed = 1;
+                }
             }
             this.Owner = owner;
             this.ShipCount = shipCount;
