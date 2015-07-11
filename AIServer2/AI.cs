@@ -72,7 +72,6 @@ namespace AIServer
         {
 
             Console.Out.WriteLine("Updating");
-            var analyser = new Analyser(container, name);
 
             if (!_firstDataReceived)
             {
@@ -88,7 +87,7 @@ namespace AIServer
 
             int planetsToAttack = 2;
             var closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
-            switch(attackStrategy)
+            switch (attackStrategy)
             {
                 case 0:
                     foreach (var planet in MyPlanets)
@@ -98,7 +97,7 @@ namespace AIServer
                             Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * 0.8 / planetsToAttack));
                         }
                     }
-                    if(!closestToEnemyMaster.Any(p => p.Owner != name))
+                    if (!closestToEnemyMaster.Any(p => p.Owner != name))
                     {
                         attackStrategy = 1;
                     }
@@ -108,7 +107,7 @@ namespace AIServer
                     {
                         attackStrategy = 0;
                     }
-                    foreach(var planet in MyPlanets)
+                    foreach (var planet in MyPlanets)
                     {
                         Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * 0.8 / planetsToAttack));
                     }
@@ -116,7 +115,7 @@ namespace AIServer
                 default:
                     break;
             }
-            
+
 
             /*
             foreach (var planet in analyser.MyPlanets)
@@ -141,7 +140,7 @@ namespace AIServer
 
         void UpdatePlanets(List<Planet> newPlanets)
         {
-            foreach(var newPlanet in newPlanets)
+            foreach (var newPlanet in newPlanets)
             {
                 var currentPlanet = this.Planets.First(p => p.Id == newPlanet.Id);
                 currentPlanet.Owner = newPlanet.Owner;

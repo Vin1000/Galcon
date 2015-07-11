@@ -21,6 +21,16 @@ namespace AIServer
 
         public Dictionary<Planet, float> PlanetDistances { get; set; }
 
+        public List<Planet> GetClosestPlanets(int number, bool includeSelf)
+        {
+            number = Math.Min(PlanetDistances.Count - 1, number);
+            if (includeSelf)
+            {
+                return PlanetDistances.Keys.OrderBy(p => this.GetDistance(p)).Take(number).ToList();
+            }
+            return PlanetDistances.Keys.Where(p => p.Id != this.Id).OrderBy(p => this.GetDistance(p)).Take(number).ToList();
+        }
+
         public Planet(dynamic json)
         {
             Id = Int32.Parse(json.id);
@@ -36,7 +46,7 @@ namespace AIServer
 
         public float GetDistance(Planet planet)
         {
-            return (float)Math.Sqrt( Math.Pow(planet.PosX - PosX, 2) + Math.Pow(planet.PosY - PosY, 2));
+            return (float)Math.Sqrt(Math.Pow(planet.PosX - PosX, 2) + Math.Pow(planet.PosY - PosY, 2));
         }
     }
 }
