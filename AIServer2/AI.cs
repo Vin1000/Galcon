@@ -112,9 +112,9 @@ namespace AIServer
             }
             attackCount++;
 
-            previousStrategy = attackStrategy;
-            if(attackCount % 5 == 0) //TEST
+            if(DeathStar.ReadyToAttackNextTurn)
             {
+                previousStrategy = attackStrategy;
                 attackStrategy = 3;
             }
         }
@@ -167,16 +167,19 @@ namespace AIServer
             Console.Out.WriteLine("!");
             foreach (var planet in MyPlanets)
             {
-                Game.AttackPlanet(planet, enemyMaster, (int)Math.Ceiling((double)planet.ShipCount * percentage));
                 var myClosestPlanets = planet.GetMyClosestPlanets(name);
                 int no = 0;
                 if(myClosestPlanets.Count > 2)
                 {
                     no = 1;
                 }
-                Game.AttackPlanet(planet, myClosestPlanets[no], (int)Math.Floor((double)planet.ShipCount * (1 - percentage)) - 1);
+                Game.AttackPlanet(planet, myClosestPlanets[no], (int)Math.Floor((double)planet.ShipCount * (1 - percentage)));
+                Game.AttackPlanet(planet, enemyMaster, (int)Math.Ceiling((double)planet.ShipCount * percentage)-1);
             }
-            attackStrategy = previousStrategy;
+            if(!DeathStar.ReadyToAttackNextTurn)
+            {
+                attackStrategy = previousStrategy;
+            }
         }
 
         void UpdatePlanets(List<Planet> newPlanets)
