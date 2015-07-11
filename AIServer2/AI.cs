@@ -68,6 +68,9 @@ namespace AIServer
         Planet enemyMaster;
         int attackCount = 0;
         int attackStrategy = 0;
+        int planetsToAttack = 2;
+        double percentage = 0.8;
+        List<Planet> closestToEnemyMaster = new List<Planet>();
         public void update(UpdateContainer container)
         {
 
@@ -76,6 +79,7 @@ namespace AIServer
             if (!_firstDataReceived)
             {
                 InitPlanets(container.Planets);
+                this._firstDataReceived = true;
             }
             else
             {
@@ -84,68 +88,64 @@ namespace AIServer
             }
             enemyMaster = EnemyPlanets.OrderBy(p => p.ShipCount).FirstOrDefault();
 
-            int planetsToAttack = 2;
-            var percentage = 0.8;
-            var closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
+            closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
             switch (attackStrategy)
             {
                 case 0:
-                    foreach (var planet in MyPlanets)
-                    {
-                        if (!_firstDataReceived)
-                        {
-                            foreach(Planet p in Planets.Where(p => p.ShipCount <= 5).ToList())
-                            {
-                                Game.AttackPlanet(MyPlanets.First(), p, 6);
-                            }
-                        }
-                        foreach (var closest in closestToEnemyMaster)
-                        {
-                            Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
-                        }
-                    }
-                    if (!closestToEnemyMaster.Any(p => p.Owner != name))
-                    {
-                        attackStrategy = 1;
-                    }
+                    Strategy0();
                     break;
                 case 1:
-                    if (closestToEnemyMaster.Any(p => p.Owner != name))
-                    {
-                        attackStrategy = 0;
-                    }
-                    foreach (var planet in MyPlanets)
-                    {
-                        Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
-                    }
+                    Strategy1();
+                    break;
+                case 2:
+                    Strategy2();
                     break;
                 default:
                     break;
             }
+            attackCount++;
+        }
 
-
-            /*
-            foreach (var planet in analyser.MyPlanets)
+        void Strategy0() //attack noob planets and enemy master neighbors
+        {
+            foreach (var planet in MyPlanets)
             {
-                foreach (var idle in analyser.NeutralPlanets)
+                foreach (Planet p in Planets.Where(p => p.ShipCount <= 5).ToList())
                 {
-                    Game.AttackPlanet(planet, idle, (int)Math.Floor((double)planet.ShipCount/analyser.NeutralPlanets.Count));
+                    Game.AttackPlanet(MyPlanets.First(), p, 6);
+                }
+                foreach (var closest in closestToEnemyMaster)
+                {
+                    Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
                 }
             }
-            if (analyser.NeutralPlanets.Count == 0)
+            attackStrategy = 1;
+        }
+
+        void Strategy1() //attack enemy master neighbors
+        {
+            foreach (var planet in MyPlanets)
             {
-                foreach (var planet in analyser.MyPlanets)
+                foreach (var closest in closestToEnemyMaster)
                 {
-                    foreach (var enemy in analyser.EnemyPlanets)
-                    {
-                        Game.AttackPlanet(planet, enemy, planet.ShipCount-1);
-                    }
+                    Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
                 }
-            }*/
-            attackCount++;
-            if (!_firstDataReceived)
+            }
+            if (!closestToEnemyMaster.Any(p => p.Owner != name))
             {
-                this._firstDataReceived = true;
+                attackStrategy = 2;
+            }
+        }
+
+        void Strategy2() //attack enemy master
+        {
+            foreach (var planet in MyPlanets)
+            {
+                Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
+            }
+            if (closestToEnemyMaster.Any(p => p.Owner != name))
+            {
+                attackStrategy = 1;
             }
         }
 
