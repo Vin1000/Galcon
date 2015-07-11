@@ -14,7 +14,7 @@ namespace AIServer
 
         public TCPServer Game { get; private set; }
 
-
+        public Planet DeathStar { get; set; }
 
         // Set your team Name here!!!
         private const string name = "Darth Minions";
@@ -153,6 +153,7 @@ namespace AIServer
 
         void UpdatePlanets(List<Planet> newPlanets)
         {
+
             if (newPlanets.Count != Planets.Count)
             {
                 this.Planets = this.Planets.Where(p => newPlanets.Any(np => np.Id == p.Id)).ToList();
@@ -161,17 +162,16 @@ namespace AIServer
             foreach (var newPlanet in newPlanets)
             {
                 var currentPlanet = this.Planets.First(p => p.Id == newPlanet.Id);
-                currentPlanet.Owner = newPlanet.Owner;
-                currentPlanet.ShipCount = newPlanet.ShipCount;
+                currentPlanet.Update(newPlanet.Owner, newPlanet.ShipCount);
             }
         }
 
         void InitPlanets(List<Planet> planets)
         {
+            this.DeathStar = planets.FirstOrDefault(p => p.IsDeathStar);
             this.Planets = new List<Planet>();
             foreach (var planet in planets)
             {
-
                 foreach (var neighbour in planets)
                 {
                     planet.PlanetDistances.Add(neighbour, planet.GetDistance(neighbour));

@@ -14,6 +14,7 @@ namespace AIServer
         public float PosX { get; set; }
         public float PosY { get; set; }
         public string Owner { get; set; }
+
         public int ShipCount { get; set; }
         public float Size { get; set; }
         public float DeathStarCharge { get; set; }
@@ -47,6 +48,35 @@ namespace AIServer
         public float GetDistance(Planet planet)
         {
             return (float)Math.Sqrt(Math.Pow(planet.PosX - PosX, 2) + Math.Pow(planet.PosY - PosY, 2));
+        }
+
+        private int _turnsPossessed = 0;
+
+        private const int DeathStarAlmostReady = 6;
+
+        public bool ReadyToAttackNextTurn
+        {
+            get
+            {
+                return this._turnsPossessed >= DeathStarAlmostReady;
+            }
+        }
+
+        public void Update(string owner, int shipCount)
+        {
+            if (this.IsDeathStar)
+            {
+                if (this.Owner == owner)
+                {
+                    this._turnsPossessed++;
+                }
+                else
+                {
+                    this._turnsPossessed = 0;
+                }
+            }
+            this.Owner = owner;
+            this.ShipCount = shipCount;
         }
     }
 }
