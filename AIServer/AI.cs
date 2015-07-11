@@ -141,6 +141,8 @@ namespace AIServer
 
         void UpdatePlanets(List<Planet> newPlanets)
         {
+            //var rangeToRemove = Planets.Where(p => newPlanets.Where(np => np.ID = ))
+            //Planets.RemoveRange(Planets.Where(p => p.Id))
             foreach(var newPlanet in newPlanets)
             {
                 var currentPlanet = this.Planets.First(p => p.Id == newPlanet.Id);

@@ -75,7 +75,11 @@ namespace AIServer
                 byte[] buffer = new byte[65536];
                 stream.Read(buffer, 0, 4);
                 int size = BitConverter.ToInt32(buffer, 0);
-                stream.Read(buffer, 0, size);
+				int bytesRead = 0;
+				int chunkSize = 1;
+				while(bytesRead < size && chunkSize > 0 )
+					bytesRead += chunkSize = stream.Read(buffer,bytesRead,size-bytesRead);
+
                 string content = Encoding.ASCII.GetString(buffer, 0, size);
                 dynamic data = Json.Decode(content);
                 try
