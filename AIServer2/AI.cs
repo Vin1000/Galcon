@@ -76,7 +76,6 @@ namespace AIServer
             if (!_firstDataReceived)
             {
                 InitPlanets(container.Planets);
-                this._firstDataReceived = true;
             }
             else
             {
@@ -93,6 +92,13 @@ namespace AIServer
                 case 0:
                     foreach (var planet in MyPlanets)
                     {
+                        if (!_firstDataReceived)
+                        {
+                            foreach(Planet p in Planets.Where(p => p.ShipCount <= 5).ToList())
+                            {
+                                Game.AttackPlanet(MyPlanets.First(), p, 6);
+                            }
+                        }
                         foreach (var closest in closestToEnemyMaster)
                         {
                             Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
@@ -137,6 +143,10 @@ namespace AIServer
                 }
             }*/
             attackCount++;
+            if (!_firstDataReceived)
+            {
+                this._firstDataReceived = true;
+            }
         }
 
         void UpdatePlanets(List<Planet> newPlanets)
