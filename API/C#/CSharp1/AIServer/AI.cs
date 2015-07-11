@@ -21,6 +21,7 @@ namespace AIServer
         public void update(UpdateContainer container)
         {
             Console.Out.WriteLine("Updating");
+            
         }
 
         public void set_name()
