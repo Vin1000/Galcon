@@ -55,7 +55,7 @@ namespace AIServer
             return (float)Math.Sqrt(Math.Pow(planet.PosX - PosX, 2) + Math.Pow(planet.PosY - PosY, 2));
         }
 
-        private int _turnsPossessed = 0;
+        private int _turnsPossessed = 1;
 
         private const int DeathStarAlmostReady = 6;
 
@@ -80,7 +80,7 @@ namespace AIServer
                 }
                 else
                 {
-                    this._turnsPossessed = 0;
+                    this._turnsPossessed = 1;
                 }
                 if (this._turnsPossessed >= 7 && this.DeathStarCharge == 0)
                 {
