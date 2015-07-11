@@ -76,8 +76,7 @@ namespace AIServer
         List<Planet> closestToEnemyMaster = new List<Planet>();
         public void update(UpdateContainer container)
         {
-            Console.Out.WriteLine("Updating");
-
+            //Console.Out.WriteLine("Updating");
             if (!_firstDataReceived)
             {
                 InitPlanets(container.Planets);
@@ -97,7 +96,6 @@ namespace AIServer
             if (DeathStar.ReadyToAttackNextTurn && DeathStar.Owner != name)
             {
                 attackStrategy = 3;
-                Console.Out.WriteLine("ready = 3");
             }
 
             switch (attackStrategy)
@@ -115,7 +113,7 @@ namespace AIServer
                     Strategy3();
                     break;
                 default:
-                    Console.Out.WriteLine("Error attackStrategy: " + attackStrategy);
+                    //Console.Out.WriteLine("Error attackStrategy: " + attackStrategy);
                     break;
             }
             attackCount++;
@@ -133,7 +131,6 @@ namespace AIServer
                     }
                     catch (Exception)
                     {
-                        Console.Out.WriteLine("Planet attack sucked: " + p.Id);
                     }
                     
                 }
@@ -145,7 +142,6 @@ namespace AIServer
                     }
                     catch (Exception)
                     {
-                        Console.Out.WriteLine("Closest Planet attack sucked: " + closest.Id);
                     }
                 }
             }
@@ -164,7 +160,6 @@ namespace AIServer
                     }
                     catch (Exception)
                     {
-                        Console.Out.WriteLine("Closest Planet attack sucked: " + closest.Id);
                     }
                 }
             }
@@ -184,7 +179,6 @@ namespace AIServer
                 }
                 catch (Exception)
                 {
-                    Console.Out.WriteLine("Planet attack sucked: " + planet.Id);
                 }
             }
             if (closestToEnemyMaster.Any(p => p.Owner != name))
@@ -195,7 +189,6 @@ namespace AIServer
         
         void Strategy3() //avoid death star
         {
-            Console.Out.WriteLine("!");
             foreach (var planet in MyPlanets)
             {
                 var myClosestPlanets = planet.GetMyClosestPlanets(name);
@@ -212,7 +205,6 @@ namespace AIServer
                     }
                     catch (Exception)
                     {
-                        Console.Out.WriteLine("Planet attack sucked: " + planet.Id);
                     }
                 }
 
@@ -222,12 +214,10 @@ namespace AIServer
                 }
                 catch (Exception)
                 {
-                    Console.Out.WriteLine("Planet attack sucked: " + planet.Id);
                 }
                 
             }
             attackStrategy = 2;
-            Console.Out.WriteLine("strat = 2");
         }
 
         void UpdatePlanets(List<Planet> newPlanets)
@@ -261,7 +251,7 @@ namespace AIServer
 
         public void set_name()
         {
-            Console.Out.WriteLine("Setting name");
+            //Console.Out.WriteLine("Setting name");
             Game.SetName(name);
         }
     }
