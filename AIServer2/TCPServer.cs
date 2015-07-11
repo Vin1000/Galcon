@@ -39,6 +39,30 @@ namespace AIServer
             SendMessage(msg);
         }
 
+        public void RedirectShip(Ship ship, Planet target)
+        {
+            dynamic json = new ExpandoObject();
+            json.type = "redirect_ship";
+            json.data = new ExpandoObject();
+            json.data.id_ship = ship.Id;
+            json.data.id_target = target.Id;
+
+            string msg = Newtonsoft.Json.JsonConvert.SerializeObject(json);
+            SendMessage(msg);
+        }
+
+        public void DeathstarDestroyPlanet(Planet deathstar, Planet target)
+        {
+            dynamic json = new ExpandoObject();
+            json.type = "deathstar_attack";
+            json.data = new ExpandoObject();
+            json.data.deathstar = deathstar.Id;
+            json.data.end = target.Id;
+
+            string msg = Newtonsoft.Json.JsonConvert.SerializeObject(json);
+            SendMessage(msg);
+        }
+
         public void AttackPlanet(Planet origin, Planet target, int shipCount)
         {
             dynamic json = new ExpandoObject();
