@@ -11,6 +11,7 @@ namespace AIServer
         public UpdateContainer UpdateContainer { get; set; }
         public string MyName { get; set; }
 
+        // test
         public Analyser(UpdateContainer container, string myName)
         {
             this.UpdateContainer = container;

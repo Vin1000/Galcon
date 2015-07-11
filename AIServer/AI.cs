@@ -36,9 +36,10 @@ namespace AIServer
 
             foreach (var planet in analyser.MyPlanets)
             {
-                foreach (var idle in analyser.NeutralPlanets)
+                foreach (var closest in planet.GetClosestPlanets(3))
                 {
-                    Game.AttackPlanet(planet, idle, 1);
+                    Game.AttackPlanet(planet, closest, 1);
+
                 }
             }
         }

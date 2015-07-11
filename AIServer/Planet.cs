@@ -21,6 +21,12 @@ namespace AIServer
 
         public Dictionary<Planet, float> PlanetDistances { get; set; }
 
+        public List<Planet> GetClosestPlanets(int number)
+        {
+            number = Math.Min(PlanetDistances.Count, number - 1);
+            return PlanetDistances.Keys.OrderBy(p => this.GetDistance(p)).Take(number).ToList();
+        }
+
         public Planet(dynamic json)
         {
             Id = Int32.Parse(json.id);
