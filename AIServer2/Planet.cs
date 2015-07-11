@@ -31,6 +31,11 @@ namespace AIServer
             return PlanetDistances.Keys.Where(p => p.Id != this.Id).OrderBy(p => this.GetDistance(p)).Take(number).ToList();
         }
 
+        public List<Planet> GetMyClosestPlanets(string owner)
+        {
+            return PlanetDistances.Keys.Where(p => p.Id != this.Id && p.Owner == owner).OrderBy(p => this.GetDistance(p)).ToList();
+        }
+
         public Planet(dynamic json)
         {
             Id = Int32.Parse(json.id);

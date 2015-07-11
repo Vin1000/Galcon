@@ -70,8 +70,9 @@ namespace AIServer
         Planet enemyMaster;
         int attackCount = 0;
         int attackStrategy = 0;
+        int previousStrategy = 0;
         int planetsToAttack = 2;
-        double percentage = 0.8;
+        double percentage = 0.65;
         List<Planet> closestToEnemyMaster = new List<Planet>();
         public void update(UpdateContainer container)
         {
@@ -87,8 +88,8 @@ namespace AIServer
                 //mettre a jour
                 this.UpdatePlanets(container.Planets);
             }
+            
             enemyMaster = EnemyPlanets.OrderBy(p => p.ShipCount).FirstOrDefault();
-
             closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
 
             switch (attackStrategy)
@@ -102,17 +103,27 @@ namespace AIServer
                 case 2:
                     Strategy2();
                     break;
+                case 3:
+                    Strategy3();
+                    break;
                 default:
+                    Console.Out.WriteLine("Error attackStrategy: " + attackStrategy);
                     break;
             }
             attackCount++;
+
+            previousStrategy = attackStrategy;
+            if(attackCount % 5 == 0) //TEST
+            {
+                attackStrategy = 3;
+            }
         }
 
         void Strategy0() //attack noob planets and enemy master neighbors
         {
             foreach (var planet in MyPlanets)
             {
-                foreach (Planet p in Planets.Where(p => p.ShipCount <= 5).ToList())
+                foreach (Planet p in Planets.Where(p => p.ShipCount <= 5).ToList()) //sauf neighbor!!!
                 {
                     Game.AttackPlanet(MyPlanets.First(), p, 6);
                 }
@@ -149,6 +160,23 @@ namespace AIServer
             {
                 attackStrategy = 1;
             }
+        }
+        
+        void Strategy3() //avoid death star
+        {
+            Console.Out.WriteLine("!");
+            foreach (var planet in MyPlanets)
+            {
+                Game.AttackPlanet(planet, enemyMaster, (int)Math.Ceiling((double)planet.ShipCount * percentage));
+                var myClosestPlanets = planet.GetMyClosestPlanets(name);
+                int no = 0;
+                if(myClosestPlanets.Count > 2)
+                {
+                    no = 1;
+                }
+                Game.AttackPlanet(planet, myClosestPlanets[no], (int)Math.Floor((double)planet.ShipCount * (1 - percentage)) - 1);
+            }
+            attackStrategy = previousStrategy;
         }
 
         void UpdatePlanets(List<Planet> newPlanets)
