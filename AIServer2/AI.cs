@@ -241,7 +241,7 @@ namespace AIServer
             foreach (var newPlanet in newPlanets)
             {
                 var currentPlanet = this.Planets.First(p => p.Id == newPlanet.Id);
-                currentPlanet.Update(newPlanet.Owner, newPlanet.ShipCount);
+                currentPlanet.Update(newPlanet.Owner, newPlanet.ShipCount, newPlanet.DeathStarCharge);
             }
         }
 

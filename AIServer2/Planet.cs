@@ -67,13 +67,14 @@ namespace AIServer
             }
         }
 
-        public void Update(string owner, int shipCount)
+        public void Update(string newOwner, int shipCount, float deathStarCharge)
         {
             if (this.IsDeathStar)
             {
-                if (this.Owner == owner)
+                this.DeathStarCharge = deathStarCharge;
+                if (this.Owner == newOwner)
                 {
-                    if (owner != String.Empty)
+                    if (newOwner != String.Empty)
                     {
                         this._turnsPossessed++;
                     }
@@ -82,12 +83,12 @@ namespace AIServer
                 {
                     this._turnsPossessed = 1;
                 }
-                if (this._turnsPossessed >= 7 && this.DeathStarCharge == 0)
+                if (this._turnsPossessed >= 6 && this.DeathStarCharge <= (float)1.5/(float)7.0)
                 {
                     this._turnsPossessed = 1;
                 }
             }
-            this.Owner = owner;
+            this.Owner = newOwner;
             this.ShipCount = shipCount;
         }
     }
