@@ -11,10 +11,11 @@ namespace AIServer
         public List<Planet> Planets { get; set; }
 
         private bool _firstDataReceived = false;
+
         public TCPServer Game { get; private set; }
 
         // Set your team Name here!!!
-        private const string name = "DarthMinions";
+        private const string name = "Bot";
 
         public AI(TCPServer server)
         {
@@ -23,7 +24,7 @@ namespace AIServer
 
         public void update(UpdateContainer container)
         {
-            
+
             Console.Out.WriteLine("Updating");
             var analyser = new Analyser(container, name);
 
@@ -31,14 +32,14 @@ namespace AIServer
             {
                 InitPlanets(container.Planets);
                 this._firstDataReceived = true;
-            } 
+            }
 
             foreach (var planet in analyser.MyPlanets)
             {
-                foreach(var idle in analyser.NeutralPlanets)
+                foreach (var idle in analyser.NeutralPlanets)
                 {
                     Game.AttackPlanet(planet, idle, 1);
-                }            
+                }
             }
         }
 
@@ -47,7 +48,7 @@ namespace AIServer
             this.Planets = new List<Planet>();
             foreach (var planet in planets)
             {
-                
+
                 foreach (var neighbour in planets)
                 {
                     planet.PlanetDistances.Add(neighbour, planet.GetDistance(neighbour));

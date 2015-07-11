@@ -36,7 +36,7 @@ namespace AIServer
 
         public float GetDistance(Planet planet)
         {
-            return (float)Math.Sqrt( Math.Pow(planet.PosX - PosX, 2) + Math.Pow(planet.PosY - PosY, 2));
+            return (float)Math.Sqrt(Math.Pow(planet.PosX - PosX, 2) + Math.Pow(planet.PosY - PosY, 2));
         }
     }
 }
