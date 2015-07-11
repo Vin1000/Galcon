@@ -94,7 +94,7 @@ namespace AIServer
 
             Game.DeathstarDestroyPlanet(DeathStar, enemyMaster);
 
-            if (DeathStar.ReadyToAttackNextTurn)
+            if (DeathStar.ReadyToAttackNextTurn && DeathStar.Owner != name)
             {
                 attackStrategy = 3;
                 Console.Out.WriteLine("ready = 3");
