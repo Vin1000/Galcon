@@ -65,6 +65,8 @@ namespace AIServer
             Game = server;
         }
 
+        Planet enemyMaster;
+        int attackCount = 0;
         public void update(UpdateContainer container)
         {
 
@@ -75,15 +77,14 @@ namespace AIServer
             {
                 InitPlanets(container.Planets);
                 this._firstDataReceived = true;
+                enemyMaster = EnemyPlanets.FirstOrDefault();
             }
-
-            //mettre a jour
 
             foreach (var planet in Planets)
             {
-                foreach (var closest in planet.GetClosestPlanets(3))
+                foreach (var closest in enemyMaster.GetClosestPlanets(3, false))
                 {
-                    Game.AttackPlanet(planet, closest, 1);
+                    Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount*0.8/3));
                 }
             }
 
@@ -105,6 +106,7 @@ namespace AIServer
                     }
                 }
             }*/
+            attackCount++;
         }
 
         void InitPlanets(List<Planet> planets)

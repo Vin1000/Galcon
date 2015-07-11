@@ -21,10 +21,14 @@ namespace AIServer
 
         public Dictionary<Planet, float> PlanetDistances { get; set; }
 
-        public List<Planet> GetClosestPlanets(int number)
+        public List<Planet> GetClosestPlanets(int number, bool includeSelf)
         {
             number = Math.Min(PlanetDistances.Count-1, number);
-            return PlanetDistances.Keys.OrderBy(p => this.GetDistance(p)).Take(number).ToList();
+            if(includeSelf)
+            {
+                return PlanetDistances.Keys.OrderBy(p => this.GetDistance(p)).Take(number).ToList();
+            }
+            return PlanetDistances.Keys.Where(p => p.Id != this.Id).OrderBy(p => this.GetDistance(p)).Take(number).ToList();
         }
 
         public Planet(dynamic json)
