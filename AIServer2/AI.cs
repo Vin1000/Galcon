@@ -86,6 +86,7 @@ namespace AIServer
             enemyMaster = EnemyPlanets.OrderBy(p => p.ShipCount).FirstOrDefault();
 
             int planetsToAttack = 2;
+            var percentage = 0.8;
             var closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
             switch (attackStrategy)
             {
@@ -94,7 +95,7 @@ namespace AIServer
                     {
                         foreach (var closest in closestToEnemyMaster)
                         {
-                            Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * 0.8 / planetsToAttack));
+                            Game.AttackPlanet(planet, closest, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
                         }
                     }
                     if (!closestToEnemyMaster.Any(p => p.Owner != name))
@@ -109,7 +110,7 @@ namespace AIServer
                     }
                     foreach (var planet in MyPlanets)
                     {
-                        Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * 0.8 / planetsToAttack));
+                        Game.AttackPlanet(planet, enemyMaster, (int)Math.Floor((double)planet.ShipCount * percentage / planetsToAttack));
                     }
                     break;
                 default:
