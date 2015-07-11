@@ -89,7 +89,7 @@ namespace AIServer
             }
             
             enemyMaster = EnemyPlanets.OrderBy(p => p.ShipCount).FirstOrDefault();
-            closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false, name);
+            closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
 
             Game.DeathstarDestroyPlanet(DeathStar, enemyMaster);
 
