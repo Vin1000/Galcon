@@ -70,7 +70,6 @@ namespace AIServer
         int attackStrategy = 0;
         public void update(UpdateContainer container)
         {
-
             Console.Out.WriteLine("Updating");
 
             if (!_firstDataReceived)
@@ -85,7 +84,7 @@ namespace AIServer
             enemyMaster = EnemyPlanets.OrderBy(p => p.ShipCount).FirstOrDefault();
 
             int planetsToAttack = 2;
-            var percentage = 0.8;
+            var percentage = 0.65;
             var closestToEnemyMaster = enemyMaster.GetClosestPlanets(planetsToAttack, false);
             switch (attackStrategy)
             {
@@ -151,6 +150,11 @@ namespace AIServer
 
         void UpdatePlanets(List<Planet> newPlanets)
         {
+            if (newPlanets.Count != Planets.Count)
+            {
+                this.Planets = this.Planets.Where(p => newPlanets.Any(np => np.Id == p.Id)).ToList();
+            }
+            
             foreach (var newPlanet in newPlanets)
             {
                 var currentPlanet = this.Planets.First(p => p.Id == newPlanet.Id);
