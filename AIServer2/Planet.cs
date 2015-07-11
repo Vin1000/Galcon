@@ -73,7 +73,10 @@ namespace AIServer
             {
                 if (this.Owner == owner)
                 {
-                    this._turnsPossessed++;
+                    if (owner != String.Empty)
+                    {
+                        this._turnsPossessed++;
+                    }
                 }
                 else
                 {
